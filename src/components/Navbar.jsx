@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -96,56 +97,76 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <button
+        <motion.button
           onClick={() => setMenuOpen(!menuOpen)}
+          whileTap={{ scale: 0.9 }}
           className="lg:hidden z-40 text-black w-[35px] h-[35px] rounded-full flex justify-center items-center border border-black hover:bg-black hover:text-white transition-all duration-300"
           aria-label="Toggle Menu"
         >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+          <motion.div
+            key={menuOpen ? "x-icon" : "menu-icon"}
+            initial={{ rotate: 90, opacity: 0 }}
+            animate={{ rotate: 0, opacity: 1 }}
+            exit={{ rotate: -90, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </motion.div>
+        </motion.button>
 
         {/* Mobile Menu */}
-        {menuOpen && (
-          <div className="lg:hidden absolute top-[70px] left-0 w-full bg-[#FCF8F1] px-6 py-4 flex flex-col gap-4 z-20 shadow-lg border-t border-gray-200">
-            {navItems.map((item) => (
-              <a
-                key={item}
-                href="/"
-                className="text-[16px] text-gray-800 py-2 border-b border-gray-100 hover:text-[#DD7A57] transition-all"
-              >
-                {item}
-              </a>
-            ))}
-
-            <a
-              href="/"
-              className="text-[16px] text-white px-4 py-2 border rounded-full border-[#DD7A57] bg-[#DD7A57] hover:bg-[#c46b4c] text-center transition-all duration-300"
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              key="mobile-menu"
+              initial={{ opacity: 0, scale: 0.95, y: -10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -10 }}
+              transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+              className="lg:hidden absolute top-[70px] left-0 w-full bg-[#FCF8F1] px-6 py-4 flex flex-col gap-4 z-20 shadow-lg border-t border-gray-200"
             >
-              Shop
-            </a>
-
-            <div className="flex items-center justify-between pt-4 mt-2 border-t border-gray-200">
-              <span className="font-medium text-[14px] text-gray-700">EN</span>
-              <a href="/" className="font-medium text-[14px] text-gray-700">
-                Cart
-              </a>
-              <button
-                className="group w-[35px] h-[35px] hover:bg-gray-100 rounded-full transition-all duration-300 border border-gray-300 flex justify-center items-center cursor-pointer"
-                aria-label="Profile"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  className="transition-all duration-300 fill-gray-700 group-hover:fill-black"
-                  viewBox="0 0 24 24"
+              {navItems.map((item) => (
+                <a
+                  key={item}
+                  href="/"
+                  className="text-[16px] text-gray-800 py-2 border-b border-gray-100 hover:text-[#DD7A57] transition-all"
                 >
-                  <path d="M12 2C9.24 2 7 4.24 7 7v1H4c-.55 0-1 .45-1 1v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9c0-.55-.45-1-1-1h-3V7c0-2.76-2.24-5-5-5M9 7c0-1.65 1.35-3 3-3s3 1.35 3 3v1H9zm10 3v10H5V10z" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        )}
+                  {item}
+                </a>
+              ))}
+
+              <a
+                href="/"
+                className="text-[16px] text-white px-4 py-2 border rounded-full border-[#DD7A57] bg-[#DD7A57] hover:bg-[#c46b4c] text-center transition-all duration-300"
+              >
+                Shop
+              </a>
+
+              <div className="flex items-center justify-between pt-4 mt-2 border-t border-gray-200">
+                <span className="font-medium text-[14px] text-gray-700">
+                  EN
+                </span>
+                <a href="/" className="font-medium text-[14px] text-gray-700">
+                  Cart
+                </a>
+                <button
+                  className="group w-[35px] h-[35px] hover:bg-gray-100 rounded-full transition-all duration-300 border border-gray-300 flex justify-center items-center cursor-pointer"
+                  aria-label="Profile"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    className="transition-all duration-300 fill-gray-700 group-hover:fill-black"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2C9.24 2 7 4.24 7 7v1H4c-.55 0-1 .45-1 1v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9c0-.55-.45-1-1-1h-3V7c0-2.76-2.24-5-5-5M9 7c0-1.65 1.35-3 3-3s3 1.35 3 3v1H9zm10 3v10H5V10z" />
+                  </svg>
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
